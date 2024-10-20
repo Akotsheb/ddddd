@@ -1,0 +1,33 @@
+import random
+import string
+import requests
+
+def generate_code():
+    # Generate a random 19 character alphanumeric code with random capitalization
+    return ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(19))
+
+def check_code(code):
+    url = f"https://discord.com/api/v8/entitlements/gif-codes/{code}"
+    response = requests.get(url)
+    return response.status_code == 200  # Returns True if the code is valid
+
+def generate_and_check_codes(num_codes):
+    base_url = "https://discord.gif/"
+    valid_codes = []
+    
+    for _ in range(num_codes):
+        code = generate_code()
+        full_url = f"{base_url}{code}"
+        if check_code(code):
+            valid_codes.append(full_url)
+            print(f"Valid Code: {full_url}")
+        else:
+            print(f"Invalid Code: {full_url}")
+
+    return valid_codes
+
+if __name__ == "__main__":
+    num_codes_to_generate = int(input("Enter the number of codes to generate: "))
+    generate_and_check_codes(num_codes_to_generate)
+
+
